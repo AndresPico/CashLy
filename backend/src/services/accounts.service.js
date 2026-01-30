@@ -1,30 +1,40 @@
 import { supabaseAdmin  } from './supabase.service.js'
 
-export const createAccount = async ({ userId, name, type, balance, currency }) => {
+export const createAccount = async ({
+  userId,
+  name,
+  type,
+  balance
+}) => {
   const { data, error } = await supabaseAdmin
     .from('accounts')
     .insert({
       user_id: userId,
       name,
       type,
-      balance,
-      currency
+      balance
     })
     .select()
-    .single()
+    .single();
 
-  if (error) throw error
-  return data
-}
+  if (error) throw error;
+  return data;
+};
 
-export const getAccountsByUser = async (userId) => {
-  const { data, error } = await supabase
+
+export async function getAccountsByUser(userId) {
+  const { data, error } = await supabaseAdmin
     .from('accounts')
     .select('*')
     .eq('user_id', userId)
+    .order('created_at', { ascending: true });
 
-  if (error) throw error
-  return data
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  // 🔑 CLAVE: si no hay cuentas, devolver array vacío
+  return data ?? [];
 }
 
 export const getAccountById = async (id, userId) => {

@@ -8,8 +8,8 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Cargar sesión inicial
   useEffect(() => {
+    // 1️⃣ Cargar sesión inicial (refresh automático de Supabase)
     const loadSession = async () => {
       const { data, error } = await supabase.auth.getSession();
 
@@ -21,29 +21,16 @@ export function AuthProvider({ children }) {
 
       setUser(session?.user ?? null);
       setToken(session?.access_token ?? null);
-
-      if (session?.access_token) {
-        localStorage.setItem('access_token', session.access_token);
-      } else {
-        localStorage.removeItem('access_token');
-      }
-
       setLoading(false);
     };
 
     loadSession();
 
-    // Listener de cambios de auth
+    // 2️⃣ Escuchar cambios de auth (login, logout, refresh)
     const { data: listener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setUser(session?.user ?? null);
         setToken(session?.access_token ?? null);
-
-        if (session?.access_token) {
-          localStorage.setItem('access_token', session.access_token);
-        } else {
-          localStorage.removeItem('access_token');
-        }
       }
     );
 
@@ -52,10 +39,11 @@ export function AuthProvider({ children }) {
     };
   }, []);
 
-  // Login con Google
+  // 3️⃣ Login con Google
   const loginWithGoogle = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google'
+      // redirectTo: 'http://localhost:5173' // opcional
     });
 
     if (error) {
@@ -63,19 +51,18 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // Logout
+  // 4️⃣ Logout
   const logout = async () => {
     await supabase.auth.signOut();
     setUser(null);
     setToken(null);
-    localStorage.removeItem('access_token');
   };
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        token,
+        token,            // 👈 ESTE es el que usa el backend
         loading,
         isAuthenticated: !!user,
         loginWithGoogle,
@@ -87,11 +74,14 @@ export function AuthProvider({ children }) {
   );
 }
 
+// Hook seguro
 // eslint-disable-next-line react-refresh/only-export-components
 export function useAuthContext() {
   const context = useContext(AuthContext);
+
   if (!context) {
     throw new Error('useAuthContext must be used within an AuthProvider');
   }
+
   return context;
 }

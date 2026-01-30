@@ -12,7 +12,10 @@ export const createAccount = async (req, res) => {
 
     res.status(201).json(account);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    console.error(err);
+    res.status(422).json({
+      message: err.message
+    });
   }
 };
 
@@ -22,9 +25,10 @@ export const createAccount = async (req, res) => {
 export const getAccounts = async (req, res) => {
   try {
     const accounts = await accountsService.getAccountsByUser(req.user.id);
-    res.json(accounts);
+    res.status(200).json(accounts);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    console.error('GET /accounts error:', err);
+    res.status(500).json({ error: 'Failed to fetch accounts' });
   }
 };
 

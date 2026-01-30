@@ -20,14 +20,4 @@ app.use('/api/transactions', transactionsRoutes);
 app.use('/api/goals', goalsRoutes);
 app.use('/api/budgets', budgetsRoutes);
 
-// Health check
-app.get('/health', (req, res) => {
-  res.status(200).json({
-    status: 'ok',
-    service: 'cashly-backend',
-    timestamp: new Date().toISOString()
-  });
-});
-
-
 export default app;

@@ -6,9 +6,7 @@ export const accountCreateSchema = z.object({
     .min(1, 'Name is required')
     .max(100, 'Name too long'),
 
-  type: z.enum(['cash', 'bank', 'credit', 'investment'], {
-    errorMap: () => ({ message: 'Invalid account type' })
-  }),
+  type: z.enum(['cash', 'bank', 'credit', 'savings']),
 
   balance: z
     .number()
