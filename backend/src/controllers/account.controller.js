@@ -1,5 +1,26 @@
 import * as accountsService from '../services/accounts.service.js';
 
+const normalizeAccountPayload = (payload = {}) => {
+  const normalized = { ...payload };
+
+  if (normalized.type !== 'bank') {
+    normalized.bank_name = null;
+    return normalized;
+  }
+
+  if (typeof normalized.bank_name === 'string') {
+    const trimmed = normalized.bank_name.trim();
+    normalized.bank_name = trimmed || null;
+    return normalized;
+  }
+
+  if (normalized.bank_name == null) {
+    normalized.bank_name = null;
+  }
+
+  return normalized;
+};
+
 /**
  * POST /accounts
  */
@@ -7,7 +28,7 @@ export const createAccount = async (req, res) => {
   try {
     const account = await accountsService.createAccount({
       userId: req.user.id,
-      ...req.body
+      ...normalizeAccountPayload(req.body)
     });
 
     res.status(201).json(account);
@@ -56,7 +77,7 @@ export const updateAccount = async (req, res) => {
     const account = await accountsService.updateAccount(
       req.params.id,
       req.user.id,
-      req.body
+      normalizeAccountPayload(req.body)
     );
 
     res.json(account);
@@ -70,13 +91,33 @@ export const updateAccount = async (req, res) => {
  */
 export const deleteAccount = async (req, res) => {
   try {
-    await accountsService.deleteAccount(
+    console.log('=== ELIMINANDO CUENTA ===');
+    console.log('ID a eliminar:', req.params.id);
+    console.log('Usuario:', req.user.id);
+    console.log('=========================');
+
+    const deleted = await accountsService.deleteAccount(
       req.params.id,
       req.user.id
     );
 
-    res.status(204).send();
+    return res.status(200).json({
+      message: 'Account deleted successfully',
+      deleted_id: deleted.id
+    });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    console.error('DELETE /accounts/:id error:', err);
+
+    if (err.code === 'ACCOUNT_NOT_FOUND') {
+      return res.status(404).json({ error: err.message });
+    }
+
+    if (err.code === '23503') {
+      return res.status(409).json({
+        error: 'Cannot delete account because it has related records'
+      });
+    }
+
+    return res.status(400).json({ error: err.message });
   }
 };

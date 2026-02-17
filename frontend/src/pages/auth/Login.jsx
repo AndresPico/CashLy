@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import '../../assets/css/login.css';
-import cashlyLogo from '../../assets/Logo.png';
+import cashlyLogo from '../../assets/Logo/Logo.png';
 
 
 function Login() {
