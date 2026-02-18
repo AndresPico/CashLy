@@ -4,6 +4,9 @@ import { useAuth } from '../hooks/useAuth';
 import Login from '../pages/auth/Login';
 import Home from '../pages/home/home';
 import AccountsPage from '../pages/accounts/AccountsPage';
+import TransactionsPage from '../pages/transactions/TransactionsPage';
+import CategoriesPage from '../pages/categories/CategoriesPage';
+import BudgetsPage from '../pages/budgets/BudgetsPage';
 import MainLayout from '../layout/MainLayout';
 
 function PrivateRoute({ children }) {
@@ -31,6 +34,10 @@ export default function AppRouter() {
         >
           <Route path="/" element={<Home />} />
           <Route path="/api/accounts" element={<AccountsPage />} />
+          <Route path="/accounts" element={<AccountsPage />} />
+          <Route path="/transactions" element={<TransactionsPage />} />
+          <Route path="/categories" element={<CategoriesPage />} />
+          <Route path="/budgets" element={<BudgetsPage />} />
         </Route>
 
         {/* Fallback */}

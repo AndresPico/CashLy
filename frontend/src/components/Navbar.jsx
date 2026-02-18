@@ -30,7 +30,7 @@ export default function Navbar() {
 
   const navItems = [
     { path: '/', label: 'Dashboard', icon: '📊' },
-    { path: '/api/accounts', label: 'Cuentas', icon: '🏦' },
+    { path: '/accounts', label: 'Cuentas', icon: '🏦' },
     { path: '/transactions', label: 'Transacciones', icon: '💳' },
     { path: '/categories', label: 'Categorías', icon: '🏷️' },
     { path: '/budgets', label: 'Presupuestos', icon: '📊' },

@@ -10,6 +10,7 @@ const accountBaseSchema = z.object({
 
   balance: z
     .number()
+    .int('Balance must be an integer (no decimals)')
     .min(0, 'Balance cannot be negative')
     .optional(),
 

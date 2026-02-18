@@ -231,7 +231,7 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .account-form {
-    padding: 20px;
+    padding: 24px 20px;
   }
   
   .bank-grid {
@@ -246,7 +246,7 @@
 
 @media (max-width: 480px) {
   .account-form {
-    padding: 15px;
+    padding: 20px 16px;
   }
   
   .bank-grid {

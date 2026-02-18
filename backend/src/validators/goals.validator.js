@@ -3,14 +3,21 @@ import { z } from 'zod';
 export const createGoalSchema = z.object({
   name: z.string().min(1),
   account_id: z.string().uuid(),
-  target_amount: z.number().positive(),
+  target_amount: z
+    .number()
+    .int('Target amount must be an integer (no decimals)')
+    .positive(),
   start_date: z.string().optional(),
   end_date: z.string().optional()
 });
 
 export const updateGoalSchema = z.object({
   name: z.string().min(1).optional(),
-  target_amount: z.number().positive().optional(),
+  target_amount: z
+    .number()
+    .int('Target amount must be an integer (no decimals)')
+    .positive()
+    .optional(),
   start_date: z.string().optional(),
   end_date: z.string().optional()
 });

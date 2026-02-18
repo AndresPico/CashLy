@@ -4,6 +4,7 @@ import { authenticate } from '../middlewares/auth.middleware.js';
 import { validate } from '../middlewares/validate.middleware.js';
 import {
   categoryCreateSchema,
+  categoryQuerySchema,
   categoryUpdateSchema
 } from '../validators/category.schema.js';
 
@@ -17,7 +18,11 @@ router.post(
   categoriesController.createCategory
 );
 
-router.get('/', categoriesController.getCategories);
+router.get(
+  '/',
+  validate(categoryQuerySchema, 'query'),
+  categoriesController.getCategories
+);
 
 router.put(
   '/:id',

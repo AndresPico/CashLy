@@ -13,11 +13,11 @@ const Home = () => {
       </p>
 
       <div style={styles.grid}>
-        <Link to="/api/accounts" style={styles.card}>🏦 Accounts</Link>
-        <Link to="/api/transactions" style={styles.card}>💳 Transactions</Link>
-        <Link to="/api/categories" style={styles.card}>🏷 Categories</Link>
-        <Link to="/api/budgets" style={styles.card}>📊 Budgets</Link>
-        <Link to="/api/goals" style={styles.card}>🎯 Goals</Link>
+        <Link to="/accounts" style={styles.card}>Accounts</Link>
+        <Link to="/transactions" style={styles.card}>Transactions</Link>
+        <Link to="/categories" style={styles.card}>Categories</Link>
+        <Link to="/budgets" style={styles.card}>Budgets</Link>
+        <Link to="/goals" style={styles.card}>Goals</Link>
       </div>
 
       <button onClick={logout} style={styles.logout}>

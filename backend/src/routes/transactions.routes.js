@@ -3,7 +3,9 @@ import * as transactionsController from '../controllers/transaction.controller.j
 import { authenticate } from '../middlewares/auth.middleware.js';
 import { validate } from '../middlewares/validate.middleware.js';
 import {
-  transactionCreateSchema
+  transactionCreateSchema,
+  transactionQuerySchema,
+  transactionUpdateSchema
 } from '../validators/transaction.schema.js';
 
 const router = Router();
@@ -16,6 +18,18 @@ router.post(
   transactionsController.createTransaction
 );
 
-router.get('/', transactionsController.getTransactions);
+router.get(
+  '/',
+  validate(transactionQuerySchema, 'query'),
+  transactionsController.getTransactions
+);
+
+router.put(
+  '/:id',
+  validate(transactionUpdateSchema),
+  transactionsController.updateTransaction
+);
+
+router.delete('/:id', transactionsController.deleteTransaction);
 
 export default router;

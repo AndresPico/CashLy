@@ -1,0 +1,387 @@
+.budgets-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  gap: 20px;
+}
+
+.budgets-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 24px;
+  border-radius: 18px;
+  background: linear-gradient(120deg, #0f766e, #22c55e);
+  color: #ffffff;
+}
+
+.budgets-header h1 {
+  margin: 0 0 6px;
+  font-size: 1.9rem;
+}
+
+.budgets-header p {
+  margin: 0;
+  opacity: 0.92;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.month-filter {
+  display: grid;
+  gap: 4px;
+  font-size: 0.85rem;
+}
+
+.month-filter input {
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.96);
+  color: #0f172a;
+}
+
+.month-filter input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.24);
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.summary-grid article {
+  border-radius: 12px;
+  padding: 14px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.summary-grid span {
+  color: #475569;
+  font-size: 0.9rem;
+}
+
+.summary-grid strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 1.35rem;
+  color: #0f172a;
+}
+
+.summary-grid article.negative strong {
+  color: #b91c1c;
+}
+
+.budgets-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.budget-card {
+  border-radius: 14px;
+  padding: 14px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  display: grid;
+  gap: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.budget-card.healthy {
+  border-left: 6px solid #16a34a;
+}
+
+.budget-card.warning {
+  border-left: 6px solid #ca8a04;
+}
+
+.budget-card.exceeded {
+  border-left: 6px solid #dc2626;
+}
+
+.budget-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.budget-category {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.category-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+  font-size: 1.05rem;
+}
+
+.budget-category h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.budget-category small {
+  color: #64748b;
+}
+
+.status-badge {
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.status-badge.healthy {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-badge.warning {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+.status-badge.exceeded {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.progress-track {
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.progress-bar.healthy {
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+}
+
+.progress-bar.warning {
+  background: linear-gradient(90deg, #facc15, #ca8a04);
+}
+
+.progress-bar.exceeded {
+  background: linear-gradient(90deg, #ef4444, #b91c1c);
+}
+
+.budget-values {
+  display: grid;
+  gap: 6px;
+}
+
+.budget-values p {
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.budget-values span {
+  color: #475569;
+  font-size: 0.9rem;
+}
+
+.budget-values strong {
+  color: #0f172a;
+}
+
+.budget-values strong.negative {
+  color: #b91c1c;
+}
+
+.budget-period {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.86rem;
+}
+
+.card-actions,
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-link,
+.icon-button {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #0ea5e9;
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background: #0284c7;
+}
+
+.btn-secondary {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.btn-link {
+  background: #eff6ff;
+  color: #0369a1;
+  padding: 6px 10px;
+}
+
+.btn-link.danger {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.budgets-loading,
+.empty-state {
+  min-height: 250px;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  gap: 10px;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 4px solid #cbd5e1;
+  border-top-color: #0ea5e9;
+  border-radius: 50%;
+  margin: 0 auto;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.page-error {
+  margin: 0;
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(2, 6, 23, 0.52);
+  padding: 20px;
+  z-index: 1200;
+}
+
+.modal-card.budgets-modal {
+  width: min(560px, 100%);
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 18px 40px rgba(2, 6, 23, 0.2);
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 24px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.modal-header h3 {
+  margin: 0;
+}
+
+.icon-button {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  background: #e2e8f0;
+}
+
+.budgets-form {
+  display: grid;
+  gap: 14px;
+  padding: 26px 24px;
+}
+
+.budgets-form label {
+  display: grid;
+  gap: 6px;
+  color: #334155;
+  font-size: 0.9rem;
+}
+
+.budgets-form input,
+.budgets-form select {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 0.95rem;
+}
+
+.budgets-form input:focus,
+.budgets-form select:focus {
+  outline: none;
+  border-color: #0ea5e9;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+}
+
+@media (max-width: 900px) {
+  .summary-grid,
+  .budgets-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .budgets-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .budgets-form {
+    padding: 22px 18px;
+  }
+}
