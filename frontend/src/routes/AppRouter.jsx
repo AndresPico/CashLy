@@ -7,6 +7,8 @@ import AccountsPage from '../pages/accounts/AccountsPage';
 import TransactionsPage from '../pages/transactions/TransactionsPage';
 import CategoriesPage from '../pages/categories/CategoriesPage';
 import BudgetsPage from '../pages/budgets/BudgetsPage';
+import GoalsPage from '../pages/goals/GoalsPage';
+import ReportsPage from '../pages/reports/ReportsPage';
 import MainLayout from '../layout/MainLayout';
 
 function PrivateRoute({ children }) {
@@ -38,6 +40,8 @@ export default function AppRouter() {
           <Route path="/transactions" element={<TransactionsPage />} />
           <Route path="/categories" element={<CategoriesPage />} />
           <Route path="/budgets" element={<BudgetsPage />} />
+          <Route path="/goals" element={<GoalsPage />} />
+          <Route path="/reports" element={<ReportsPage />} />
         </Route>
 
         {/* Fallback */}

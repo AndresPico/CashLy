@@ -4,6 +4,28 @@ import { useAuth } from '../hooks/useAuth';
 import '../assets/css/Navbar.css';
 import cashlyLogo from '../assets/Logo/Logo.png';
 
+const getUserAvatar = (user) => {
+  if (!user) return '';
+
+  return (
+    user.user_metadata?.avatar_url ||
+    user.user_metadata?.picture ||
+    user.identities?.[0]?.identity_data?.avatar_url ||
+    user.identities?.[0]?.identity_data?.picture ||
+    ''
+  );
+};
+
+const getUserInitial = (user) => {
+  const source =
+    user?.user_metadata?.name ||
+    user?.user_metadata?.full_name ||
+    user?.email ||
+    'U';
+
+  return source[0]?.toUpperCase() || 'U';
+};
+
 export default function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -41,6 +63,8 @@ export default function Navbar() {
   ];
 
   const isActive = (path) => location.pathname === path;
+  const avatarUrl = getUserAvatar(user);
+  const initial = getUserInitial(user);
 
   return (
     <>
@@ -72,15 +96,16 @@ export default function Navbar() {
               tabIndex={0}
               onKeyDown={(e) => e.key === 'Enter' && setIsMenuOpen(!isMenuOpen)}
             >
-              {user?.photoURL ? (
+              {avatarUrl ? (
                 <img 
-                  src={user.photoURL} 
+                  src={avatarUrl} 
                   alt={user.email} 
                   className="profile-photo"
+                  referrerPolicy="no-referrer"
                 />
               ) : (
                 <div className="profile-initial">
-                  <span>{(user?.email?.[0] || 'U').toUpperCase()}</span>
+                  <span>{initial}</span>
                 </div>
               )}
             </div>
@@ -91,15 +116,16 @@ export default function Navbar() {
         <div className={`sidebar-menu ${isMenuOpen ? 'open' : ''}`}>
           <div className="sidebar-header">
             <div className="user-info">
-              {user?.photoURL ? (
+              {avatarUrl ? (
                 <img 
-                  src={user.photoURL} 
+                  src={avatarUrl} 
                   alt={user.email} 
                   className="sidebar-user-photo"
+                  referrerPolicy="no-referrer"
                 />
               ) : (
                 <div className="sidebar-user-fallback">
-                  <span>{(user?.email?.[0] || 'U').toUpperCase()}</span>
+                  <span>{initial}</span>
                 </div>
               )}
               <div className="user-details">

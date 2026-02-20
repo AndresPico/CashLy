@@ -1,0 +1,384 @@
+.goals-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  gap: 20px;
+}
+
+.goals-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 24px;
+  border-radius: 18px;
+  background: linear-gradient(120deg, #0f766e, #1d4ed8);
+  color: #ffffff;
+}
+
+.goals-header h1 {
+  margin: 0 0 6px;
+  font-size: 1.9rem;
+}
+
+.goals-header p {
+  margin: 0;
+  opacity: 0.92;
+}
+
+.goals-summary-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.goals-summary-grid article {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.goals-summary-grid span {
+  display: block;
+  font-size: 0.9rem;
+  color: #475569;
+  margin-bottom: 8px;
+}
+
+.goals-summary-grid strong {
+  font-size: 1.2rem;
+}
+
+.goals-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.goal-card {
+  border-radius: 16px;
+  padding: 16px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  display: grid;
+  gap: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.goal-card header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.goal-card h3 {
+  margin: 0 0 4px;
+}
+
+.goal-card small {
+  color: #64748b;
+}
+
+.goal-status {
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.goal-status.active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.goal-status.completed {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.goal-status.paused {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.goal-progress-track {
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.goal-progress-bar {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #0ea5e9, #2563eb);
+  animation: loadProgress 0.9s ease;
+}
+
+@keyframes loadProgress {
+  from { width: 0; }
+}
+
+.goal-metrics {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.goal-metrics p {
+  margin: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.goal-metrics span {
+  color: #64748b;
+  font-size: 0.82rem;
+}
+
+.goal-metrics strong {
+  font-size: 0.95rem;
+}
+
+.goal-progress-label,
+.goal-description {
+  margin: 0;
+  color: #334155;
+}
+
+.goal-description {
+  font-size: 0.92rem;
+}
+
+.card-actions,
+.row-actions,
+.form-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.card-actions {
+  justify-content: flex-end;
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-link,
+.icon-button {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #0ea5e9;
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background: #0284c7;
+}
+
+.btn-secondary {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.btn-link {
+  background: #eff6ff;
+  color: #0369a1;
+  padding: 6px 10px;
+}
+
+.btn-link.danger {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.goals-loading,
+.empty-state,
+.contributions-list {
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.goals-loading,
+.empty-state {
+  min-height: 260px;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  gap: 10px;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 4px solid #cbd5e1;
+  border-top-color: #0ea5e9;
+  border-radius: 50%;
+  margin: 0 auto;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.page-error {
+  color: #b91c1c;
+  margin: 0;
+  font-weight: 600;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(2, 6, 23, 0.52);
+  padding: 20px;
+  z-index: 1200;
+}
+
+.modal-card {
+  width: min(720px, 100%);
+  max-height: 90vh;
+  overflow: auto;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 18px 40px rgba(2, 6, 23, 0.2);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 24px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.modal-header h3 {
+  margin: 0;
+}
+
+.icon-button {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  background: #e2e8f0;
+}
+
+.goals-form {
+  padding: 24px;
+  display: grid;
+  gap: 12px;
+}
+
+.goals-form label {
+  display: grid;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: #334155;
+}
+
+.goals-form input,
+.goals-form select,
+.goals-form textarea {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.goals-form input:focus,
+.goals-form select:focus,
+.goals-form textarea:focus {
+  border-color: #0ea5e9;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+}
+
+.form-actions {
+  justify-content: flex-end;
+}
+
+.contributions-list {
+  margin: 0 24px 24px;
+  padding: 14px;
+}
+
+.contributions-list h4 {
+  margin: 0 0 12px;
+}
+
+.contributions-list ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+
+.contributions-list li {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.contributions-list strong,
+.contributions-list span,
+.contributions-list small {
+  display: block;
+}
+
+.contributions-list span,
+.contributions-list small,
+.empty-contributions {
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 900px) {
+  .goals-summary-grid,
+  .goals-grid,
+  .goal-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .card-actions {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 640px) {
+  .goals-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .modal-header,
+  .goals-form,
+  .contributions-list {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .contributions-list li {
+    flex-direction: column;
+  }
+}

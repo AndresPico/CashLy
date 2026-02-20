@@ -212,25 +212,32 @@
 
 /* Botón de login */
 .login-button {
-  background: linear-gradient(135deg, #498fff, #357AE8);
-  border: none;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
   border-radius: 12px;
-  color: white;
+  color: #1f2937;
   font-weight: 600;
   font-size: 1rem;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
 }
 
 .login-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
-  background: linear-gradient(135deg, #357AE8, #2A65D2);
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.14);
+  background: #f8fafc;
+  border-color: #9ca3af;
 }
 
 .login-button:active:not(:disabled) {
   transform: translateY(0);
+}
+
+.login-button:focus-visible:not(:disabled) {
+  outline: 3px solid rgba(37, 99, 235, 0.22);
+  outline-offset: 2px;
 }
 
 .login-button::after {
