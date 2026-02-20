@@ -6,6 +6,7 @@ import {
   getCategories,
   updateCategory
 } from '../../services/categories.service';
+import { useFeedback } from '../../context/FeedbackContext';
 import CategoriesForm from './CategoriesForm';
 import '../../assets/css/CategoriesPage.css';
 
@@ -13,6 +14,7 @@ const emptyCategory = null;
 
 export default function CategoriesPage() {
   const { token, loading: authLoading } = useAuthContext();
+  const feedback = useFeedback();
 
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -65,8 +67,10 @@ export default function CategoriesPage() {
       await createCategory(payload, token);
       setShowCreateModal(false);
       await loadCategories();
+      feedback.success('Categoria creada correctamente.');
     } catch (err) {
       setError(err.message || 'No se pudo crear la categoria');
+      feedback.error(err.message || 'No se pudo crear la categoria.');
     } finally {
       setSubmitting(false);
     }
@@ -82,8 +86,10 @@ export default function CategoriesPage() {
       await updateCategory(editingCategory.id, payload, token);
       setEditingCategory(emptyCategory);
       await loadCategories();
+      feedback.success('Categoria actualizada correctamente.');
     } catch (err) {
       setError(err.message || 'No se pudo actualizar la categoria');
+      feedback.error(err.message || 'No se pudo actualizar la categoria.');
     } finally {
       setSubmitting(false);
     }
@@ -94,10 +100,20 @@ export default function CategoriesPage() {
 
     if (usage > 0) {
       setError('No puedes eliminar una categoria con transacciones asociadas.');
+      feedback.error('No puedes eliminar una categoria con transacciones asociadas.');
       return;
     }
 
-    if (!window.confirm(`Eliminar la categoria "${category.name}"?`)) {
+    const shouldDelete = await feedback.confirm({
+      title: 'Eliminar categoria',
+      message: `¿Eliminar la categoria "${category.name}"?`,
+      note: 'Esta accion no se puede deshacer.',
+      confirmText: 'Eliminar',
+      cancelText: 'Cancelar',
+      variant: 'danger'
+    });
+
+    if (!shouldDelete) {
       return;
     }
 
@@ -107,8 +123,10 @@ export default function CategoriesPage() {
     try {
       await deleteCategory(category.id, token);
       await loadCategories();
+      feedback.success('Categoria eliminada correctamente.');
     } catch (err) {
       setError(err.message || 'No se pudo eliminar la categoria');
+      feedback.error(err.message || 'No se pudo eliminar la categoria.');
     } finally {
       setSubmitting(false);
     }

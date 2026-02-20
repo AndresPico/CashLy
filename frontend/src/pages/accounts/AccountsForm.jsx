@@ -174,8 +174,6 @@ export default function AccountsForm({ onSubmit, onCancel, initialData = {}, isE
             <option value="cash">💵 Efectivo</option>
             <option value="bank">🏦 Cuenta Bancaria</option>
             <option value="credit">💳 Tarjeta de Crédito</option>
-            <option value="savings">💰 Cuenta de Ahorros</option>
-            <option value="investment">📈 Cuenta de Inversión</option>
             <option value="other">📂 Otra</option>
           </select>
         </div>

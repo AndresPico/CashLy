@@ -8,6 +8,7 @@ import {
 } from '../../services/transactions.service';
 import { getAccounts } from '../../services/accounts.service';
 import { getCategories } from '../../services/categories.service';
+import { useFeedback } from '../../context/FeedbackContext';
 import TransactionsForm from './TransactionsForm';
 import '../../assets/css/TransactionsPage.css';
 
@@ -43,6 +44,7 @@ const emptyFilters = {
 
 export default function TransactionsPage() {
   const { token, loading: authLoading } = useAuthContext();
+  const feedback = useFeedback();
 
   const [accounts, setAccounts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -139,8 +141,10 @@ export default function TransactionsPage() {
       await createTransaction(payload, token);
       setShowCreateModal(false);
       await loadBaseData();
+      feedback.success('Transaccion creada correctamente.');
     } catch (err) {
       setError(err.message || 'No se pudo crear la transaccion');
+      feedback.error(err.message || 'No se pudo crear la transaccion.');
     } finally {
       setSubmitting(false);
     }
@@ -156,15 +160,26 @@ export default function TransactionsPage() {
       await updateTransaction(editingTransaction.id, payload, token);
       setEditingTransaction(null);
       await loadBaseData();
+      feedback.success('Transaccion actualizada correctamente.');
     } catch (err) {
       setError(err.message || 'No se pudo actualizar la transaccion');
+      feedback.error(err.message || 'No se pudo actualizar la transaccion.');
     } finally {
       setSubmitting(false);
     }
   };
 
   const handleDelete = async (transactionId) => {
-    if (!window.confirm('Esta accion eliminara la transaccion. Deseas continuar?')) {
+    const shouldDelete = await feedback.confirm({
+      title: 'Eliminar transaccion',
+      message: '¿Estas seguro de eliminar esta transaccion?',
+      note: 'Esta accion no se puede deshacer.',
+      confirmText: 'Eliminar',
+      cancelText: 'Cancelar',
+      variant: 'danger'
+    });
+
+    if (!shouldDelete) {
       return;
     }
 
@@ -174,8 +189,10 @@ export default function TransactionsPage() {
     try {
       await deleteTransaction(transactionId, token);
       await loadBaseData();
+      feedback.success('Transaccion eliminada con exito.');
     } catch (err) {
       setError(err.message || 'No se pudo eliminar la transaccion');
+      feedback.error(err.message || 'No se pudo eliminar la transaccion.');
     } finally {
       setSubmitting(false);
     }

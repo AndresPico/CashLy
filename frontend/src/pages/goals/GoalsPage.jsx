@@ -11,6 +11,7 @@ import {
   updateGoal,
   updateGoalContribution
 } from '../../services/goals.service';
+import { useFeedback } from '../../context/FeedbackContext';
 import GoalsForm from './GoalsForm';
 import GoalContributionForm from './GoalContributionForm';
 import '../../assets/css/GoalsPage.css';
@@ -43,6 +44,7 @@ const statusLabel = {
 
 export default function GoalsPage() {
   const { token, loading: authLoading } = useAuthContext();
+  const feedback = useFeedback();
 
   const [accounts, setAccounts] = useState([]);
   const [goals, setGoals] = useState([]);
@@ -116,8 +118,10 @@ export default function GoalsPage() {
       await createGoal(payload, token);
       setShowCreateModal(false);
       await loadPageData();
+      feedback.success('Meta creada correctamente.');
     } catch (err) {
       setError(err.message || 'No se pudo crear la meta');
+      feedback.error(err.message || 'No se pudo crear la meta.');
     } finally {
       setSubmitting(false);
     }
@@ -133,15 +137,26 @@ export default function GoalsPage() {
       await updateGoal(editingGoal.id, payload, token);
       setEditingGoal(null);
       await loadPageData();
+      feedback.success('Meta actualizada correctamente.');
     } catch (err) {
       setError(err.message || 'No se pudo actualizar la meta');
+      feedback.error(err.message || 'No se pudo actualizar la meta.');
     } finally {
       setSubmitting(false);
     }
   };
 
   const handleDeleteGoal = async (goal) => {
-    if (!window.confirm(`Eliminar la meta "${goal.name}"?`)) {
+    const shouldDelete = await feedback.confirm({
+      title: 'Eliminar meta',
+      message: `¿Estas seguro de eliminar la meta "${goal.name}"?`,
+      note: 'Esta accion no se puede deshacer.',
+      confirmText: 'Eliminar',
+      cancelText: 'Cancelar',
+      variant: 'danger'
+    });
+
+    if (!shouldDelete) {
       return;
     }
 
@@ -151,8 +166,10 @@ export default function GoalsPage() {
     try {
       await deleteGoal(goal.id, token);
       await loadPageData();
+      feedback.success('Meta eliminada correctamente.');
     } catch (err) {
       setError(err.message || 'No se pudo eliminar la meta');
+      feedback.error(err.message || 'No se pudo eliminar la meta.');
     } finally {
       setSubmitting(false);
     }
@@ -182,8 +199,10 @@ export default function GoalsPage() {
         loadPageData(),
         loadGoalContributions(selectedGoalForContribution.id)
       ]);
+      feedback.success('Aporte registrado correctamente.');
     } catch (err) {
       setError(err.message || 'No se pudo registrar el aporte');
+      feedback.error(err.message || 'No se pudo registrar el aporte.');
     } finally {
       setSubmitting(false);
     }
@@ -208,8 +227,10 @@ export default function GoalsPage() {
         loadPageData(),
         loadGoalContributions(selectedGoalForContribution.id)
       ]);
+      feedback.success('Aporte actualizado correctamente.');
     } catch (err) {
       setError(err.message || 'No se pudo actualizar el aporte');
+      feedback.error(err.message || 'No se pudo actualizar el aporte.');
     } finally {
       setSubmitting(false);
     }
@@ -218,7 +239,16 @@ export default function GoalsPage() {
   const handleDeleteContribution = async (contribution) => {
     if (!selectedGoalForContribution) return;
 
-    if (!window.confirm('Eliminar este aporte y devolver fondos a la cuenta?')) {
+    const shouldDelete = await feedback.confirm({
+      title: 'Eliminar aporte',
+      message: '¿Eliminar este aporte y devolver fondos a la cuenta?',
+      note: 'Esta accion no se puede deshacer.',
+      confirmText: 'Eliminar',
+      cancelText: 'Cancelar',
+      variant: 'danger'
+    });
+
+    if (!shouldDelete) {
       return;
     }
 
@@ -231,8 +261,10 @@ export default function GoalsPage() {
         loadPageData(),
         loadGoalContributions(selectedGoalForContribution.id)
       ]);
+      feedback.success('Aporte eliminado correctamente.');
     } catch (err) {
       setError(err.message || 'No se pudo eliminar el aporte');
+      feedback.error(err.message || 'No se pudo eliminar el aporte.');
     } finally {
       setSubmitting(false);
     }

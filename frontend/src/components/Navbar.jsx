@@ -51,15 +51,13 @@ export default function Navbar() {
   };
 
   const navItems = [
-    { path: '/', label: 'Dashboard', icon: '📊' },
+    { path: '/', label: 'Pagina Inicial', icon: '📊' },
     { path: '/accounts', label: 'Cuentas', icon: '🏦' },
     { path: '/transactions', label: 'Transacciones', icon: '💳' },
     { path: '/categories', label: 'Categorías', icon: '🏷️' },
     { path: '/budgets', label: 'Presupuestos', icon: '📊' },
     { path: '/goals', label: 'Metas', icon: '🎯' },
     { path: '/reports', label: 'Reportes', icon: '📈' },
-    { path: '/profile', label: 'Mi Perfil', icon: '👤' },
-    { path: '/settings', label: 'Configuración', icon: '⚙️' },
   ];
 
   const isActive = (path) => location.pathname === path;

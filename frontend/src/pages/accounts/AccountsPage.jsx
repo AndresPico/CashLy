@@ -6,11 +6,13 @@ import {
   deleteAccount,
   updateAccount
 } from '../../services/accounts.service';
+import { useFeedback } from '../../context/FeedbackContext';
 import AccountsForm from './AccountsForm';
 import '../../assets/css/AccountPage.css';
 
 export default function AccountsPage() {
   const {token, user, loading: authLoading } = useAuthContext();
+  const feedback = useFeedback();
   const [accounts, setAccounts] = useState([]);
   const [editingAccount, setEditingAccount] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -84,22 +86,33 @@ export default function AccountsPage() {
       await createAccount(payload, token);
       await loadAccounts();
       setShowForm(false);
+      feedback.success('Cuenta creada correctamente.');
     } catch (err) {
       console.error(err);
-      alert(err.message || 'Error creando cuenta');
+      feedback.error(err.message || 'Error al crear la cuenta.');
     }
   };
 
   const handleDelete = async (accountId) => {
-    if (!window.confirm('¿Estás seguro de eliminar esta cuenta? Esta acción no se puede deshacer.')) return;
+    const shouldDelete = await feedback.confirm({
+      title: 'Eliminar cuenta',
+      message: '¿Estas seguro de eliminar esta cuenta?',
+      note: 'Esta accion no se puede deshacer.',
+      confirmText: 'Eliminar',
+      cancelText: 'Cancelar',
+      variant: 'danger'
+    });
+
+    if (!shouldDelete) return;
     
     try {
       await deleteAccount(accountId, token);
       // Actualizar el estado local inmediatamente
       setAccounts(prevAccounts => prevAccounts.filter(account => account.id !== accountId));
+      feedback.success('Cuenta eliminada correctamente.');
     } catch (err) {
       console.error(err);
-      alert(err.message || 'Error eliminando cuenta');
+      feedback.error(err.message || 'Error al eliminar la cuenta.');
     }
   };
 
@@ -114,9 +127,10 @@ export default function AccountsPage() {
       await updateAccount(editingAccount.id, updatedData, token);
       await loadAccounts(); // Recargar para obtener datos actualizados
       setEditingAccount(null);
+      feedback.success('Cuenta actualizada correctamente.');
     } catch (err) {
       console.error(err);
-      alert(err.message || 'Error actualizando cuenta');
+      feedback.error(err.message || 'Error al actualizar la cuenta.');
     }
   };
 

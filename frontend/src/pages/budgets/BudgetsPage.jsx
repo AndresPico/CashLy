@@ -7,6 +7,7 @@ import {
   getBudgets,
   updateBudget
 } from '../../services/budgets.service';
+import { useFeedback } from '../../context/FeedbackContext';
 import BudgetsForm from './BudgetsForm';
 import '../../assets/css/BudgetsPage.css';
 
@@ -37,6 +38,7 @@ const stateLabels = {
 
 export default function BudgetsPage() {
   const { token, loading: authLoading } = useAuthContext();
+  const feedback = useFeedback();
 
   const [month, setMonth] = useState(currentMonth());
   const [categories, setCategories] = useState([]);
@@ -103,8 +105,10 @@ export default function BudgetsPage() {
       await createBudget(payload, token);
       setShowCreateModal(false);
       await loadBudgets(month);
+      feedback.success('Presupuesto creado correctamente.');
     } catch (err) {
       setError(err.message || 'No se pudo crear el presupuesto');
+      feedback.error(err.message || 'No se pudo crear el presupuesto.');
     } finally {
       setSubmitting(false);
     }
@@ -120,15 +124,26 @@ export default function BudgetsPage() {
       await updateBudget(editingBudget.id, payload, token);
       setEditingBudget(null);
       await loadBudgets(month);
+      feedback.success('Presupuesto actualizado correctamente.');
     } catch (err) {
       setError(err.message || 'No se pudo actualizar el presupuesto');
+      feedback.error(err.message || 'No se pudo actualizar el presupuesto.');
     } finally {
       setSubmitting(false);
     }
   };
 
   const handleDelete = async (budget) => {
-    if (!window.confirm(`Eliminar presupuesto de "${budget.category?.name || 'categoria'}"?`)) {
+    const shouldDelete = await feedback.confirm({
+      title: 'Eliminar presupuesto',
+      message: `¿Eliminar presupuesto de "${budget.category?.name || 'categoria'}"?`,
+      note: 'Esta accion no se puede deshacer.',
+      confirmText: 'Eliminar',
+      cancelText: 'Cancelar',
+      variant: 'danger'
+    });
+
+    if (!shouldDelete) {
       return;
     }
 
@@ -138,8 +153,10 @@ export default function BudgetsPage() {
     try {
       await deleteBudget(budget.id, token);
       await loadBudgets(month);
+      feedback.success('Presupuesto eliminado correctamente.');
     } catch (err) {
       setError(err.message || 'No se pudo eliminar el presupuesto');
+      feedback.error(err.message || 'No se pudo eliminar el presupuesto.');
     } finally {
       setSubmitting(false);
     }
