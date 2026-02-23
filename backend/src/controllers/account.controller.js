@@ -2,8 +2,9 @@ import * as accountsService from '../services/accounts.service.js';
 
 const normalizeAccountPayload = (payload = {}) => {
   const normalized = { ...payload };
+  const supportsBankName = ['bank', 'credit_card', 'credit'].includes(normalized.type);
 
-  if (normalized.type !== 'bank') {
+  if (!supportsBankName) {
     normalized.bank_name = null;
     return normalized;
   }

@@ -6,7 +6,7 @@ const accountBaseSchema = z.object({
     .min(1, 'Name is required')
     .max(100, 'Name too long'),
 
-  type: z.enum(['cash', 'bank', 'credit', 'savings', 'investment', 'other']),
+  type: z.enum(['cash', 'bank', 'credit_card', 'other']),
 
   balance: z
     .number()

@@ -1,33 +1,35 @@
 import { supabaseAdmin } from './supabase.service.js';
 
+const toDbAccountType = (type) => (type === 'credit_card' ? 'credit' : type);
+const toApiAccountType = (type) => (type === 'credit' ? 'credit_card' : type);
+
 export const createAccount = async (accountData) => {
-  console.log('🚀 [createAccount] Iniciando...');
-  console.log('🔍 [createAccount] accountData completo:', accountData);
-  console.log('🔍 [createAccount] ¿Tiene userId?:', 'userId' in accountData);
-  console.log('🔍 [createAccount] userId:', accountData.userId);
-  console.log('🔍 [createAccount] ¿Tiene bank_name?:', 'bank_name' in accountData);
-  console.log('🔍 [createAccount] bank_name:', accountData.bank_name);
-  
-  // Validar que tenemos userId
+  console.log('[createAccount] Iniciando...');
+  console.log('[createAccount] accountData completo:', accountData);
+  console.log('[createAccount] Tiene userId?:', 'userId' in accountData);
+  console.log('[createAccount] userId:', accountData.userId);
+  console.log('[createAccount] Tiene bank_name?:', 'bank_name' in accountData);
+  console.log('[createAccount] bank_name:', accountData.bank_name);
+
   if (!accountData.userId) {
-    console.error('❌ [createAccount] ERROR: userId no proporcionado');
+    console.error('[createAccount] ERROR: userId no proporcionado');
     throw new Error('UserId es requerido para crear una cuenta');
   }
 
   const insertData = {
     user_id: accountData.userId,
     name: accountData.name,
-    type: accountData.type,
+    type: toDbAccountType(accountData.type),
     balance: accountData.balance
   };
 
   if (accountData.bank_name !== undefined) {
     insertData.bank_name = accountData.bank_name;
-    console.log('✅ [createAccount] bank_name agregado:', accountData.bank_name);
+    console.log('[createAccount] bank_name agregado:', accountData.bank_name);
   }
-  
-  console.log('📤 [createAccount] Datos para insertar:', insertData);
-  
+
+  console.log('[createAccount] Datos para insertar:', insertData);
+
   const { data, error } = await supabaseAdmin
     .from('accounts')
     .insert(insertData)
@@ -35,12 +37,15 @@ export const createAccount = async (accountData) => {
     .single();
 
   if (error) {
-    console.error('❌ [createAccount] Error Supabase:', error);
+    console.error('[createAccount] Error Supabase:', error);
     throw error;
   }
-  
-  console.log('✅ [createAccount] Éxito:', data);
-  return data;
+
+  console.log('[createAccount] Exito:', data);
+  return {
+    ...data,
+    type: toApiAccountType(data.type)
+  };
 };
 
 export async function getAccountsByUser(userId) {
@@ -54,7 +59,10 @@ export async function getAccountsByUser(userId) {
     throw new Error(error.message);
   }
 
-  return data ?? [];
+  return (data ?? []).map((account) => ({
+    ...account,
+    type: toApiAccountType(account.type)
+  }));
 }
 
 export const getAccountById = async (id, userId) => {
@@ -66,8 +74,11 @@ export const getAccountById = async (id, userId) => {
     .single();
 
   if (error) throw error;
-  return data;
-}
+  return {
+    ...data,
+    type: toApiAccountType(data.type)
+  };
+};
 
 export const updateAccount = async (accountId, userId, accountData) => {
   const updateData = {};
@@ -76,8 +87,10 @@ export const updateAccount = async (accountId, userId, accountData) => {
     updateData.name = accountData.name;
   }
   if (Object.prototype.hasOwnProperty.call(accountData, 'type')) {
-    updateData.type = accountData.type;
-    if (accountData.type !== 'bank' && !Object.prototype.hasOwnProperty.call(accountData, 'bank_name')) {
+    const normalizedType = toDbAccountType(accountData.type);
+    updateData.type = normalizedType;
+
+    if (!['bank', 'credit'].includes(normalizedType) && !Object.prototype.hasOwnProperty.call(accountData, 'bank_name')) {
       updateData.bank_name = null;
     }
   }
@@ -97,7 +110,10 @@ export const updateAccount = async (accountId, userId, accountData) => {
     .single();
 
   if (error) throw error;
-  return data;
+  return {
+    ...data,
+    type: toApiAccountType(data.type)
+  };
 };
 
 export const deleteAccount = async (id, userId) => {

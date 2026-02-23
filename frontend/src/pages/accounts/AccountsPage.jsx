@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { useAuthContext } from '../../context/AuthContext';
 import {
   getAccounts,
@@ -20,7 +20,7 @@ export default function AccountsPage() {
   const [showForm, setShowForm] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState(null);
 
-  // Función para formatear números con separadores de miles
+  // Funcion para formatear numeros con separadores de miles
   const formatNumber = (number) => {
     if (typeof number !== 'number') return '0';
     // Formatear sin decimales
@@ -30,15 +30,15 @@ export default function AccountsPage() {
     });
   };
 
-  // Función para formatear fecha
+  // Funcion para formatear fecha
   const formatDate = (dateString) => {
     if (!dateString) return 'Fecha no disponible';
     
     try {
       const date = new Date(dateString);
-      // Verificar si la fecha es válida
+      // Verificar si la fecha es valida
       if (isNaN(date.getTime())) {
-        return 'Fecha inválida';
+        return 'Fecha invalida';
       }
       return date.toLocaleDateString('es-CO', {
         year: 'numeric',
@@ -47,11 +47,11 @@ export default function AccountsPage() {
       });
     } catch (error) {
       console.error('Error formateando fecha:', error);
-      return 'Fecha inválida';
+      return 'Fecha invalida';
     }
   };
 
-  // Cargar accounts cuando el token esté listo
+  // Cargar accounts cuando el token este listo
   useEffect(() => {
     if (authLoading) return;
     if (!token) return;
@@ -65,7 +65,14 @@ export default function AccountsPage() {
       setLoading(true);
       setError(null);
       const data = await getAccounts(token);
-      setAccounts(Array.isArray(data) ? data : []);
+      setAccounts(
+        Array.isArray(data)
+          ? data.map((account) => ({
+              ...account,
+              type: account.type === 'credit' ? 'credit_card' : account.type
+            }))
+          : []
+      );
     } catch (err) {
       console.error(err);
       setError(err.message || 'Error cargando cuentas');
@@ -78,10 +85,10 @@ export default function AccountsPage() {
     try {
       const payload = {
         ...accountData,
-        userId: user.id // 👈 CLAVE
+        userId: user.id // CLAVE
       };
 
-      console.log('📦 Payload final al backend:', payload);
+      console.log('Payload final al backend:', payload);
 
       await createAccount(payload, token);
       await loadAccounts();
@@ -96,7 +103,7 @@ export default function AccountsPage() {
   const handleDelete = async (accountId) => {
     const shouldDelete = await feedback.confirm({
       title: 'Eliminar cuenta',
-      message: '¿Estas seguro de eliminar esta cuenta?',
+      message: 'Estas seguro de eliminar esta cuenta?',
       note: 'Esta accion no se puede deshacer.',
       confirmText: 'Eliminar',
       cancelText: 'Cancelar',
@@ -123,7 +130,7 @@ export default function AccountsPage() {
       console.log('Datos recibidos del formulario:', updatedData);
       console.log('===========================');
       
-      // Aquí solo pasamos los datos del formulario, NO el ID
+      // Aqui solo pasamos los datos del formulario, NO el ID
       await updateAccount(editingAccount.id, updatedData, token);
       await loadAccounts(); // Recargar para obtener datos actualizados
       setEditingAccount(null);
@@ -136,11 +143,9 @@ export default function AccountsPage() {
 
   const getAccountIcon = (type) => {
     const icons = {
-      cash: '💰',
+      cash: '💵',
       bank: '🏦',
-      credit: '💳',
-      savings: '🏺',
-      investment: '📈',
+      credit_card: '💳',
       other: '📁'
     };
     return icons[type] || '📊';
@@ -150,13 +155,13 @@ export default function AccountsPage() {
     const names = {
       cash: 'Efectivo',
       bank: 'Banco',
-      credit: 'Tarjeta de Crédito',
-      savings: 'Ahorros',
-      investment: 'Inversión',
+      credit_card: 'Tarjeta de Credito',
       other: 'Otro'
     };
     return names[type] || 'Otro';
   };
+
+  const isInstitutionLinkedType = (type) => ['bank', 'credit_card'].includes(type);
 
   if (authLoading || loading) {
     return (
@@ -210,7 +215,7 @@ export default function AccountsPage() {
                 className="close-form"
                 onClick={() => setShowForm(false)}
               >
-                ✕
+                ✖
               </button>
             </div>
             <AccountsForm 
@@ -231,7 +236,7 @@ export default function AccountsPage() {
                 className="close-form"
                 onClick={() => setEditingAccount(null)}
               >
-                ✕
+                ✖
               </button>
             </div>
             <AccountsForm
@@ -271,9 +276,6 @@ export default function AccountsPage() {
                 <div className="account-info">
                   <h3 className="account-name">{account.name}</h3>
                   <span className="account-type">{getAccountTypeName(account.type)}</span>
-                  {account.bank_name && (
-                    <span className="bank-name-display">🏦 {account.bank_name}</span>
-                  )}
                 </div>
                 <div className="account-balance">
                   <span className="balance-label">Balance</span>
@@ -283,20 +285,14 @@ export default function AccountsPage() {
               
               {selectedAccount === account.id && (
                 <div className="account-details">
-                  {account.bank_name && (
+                  {isInstitutionLinkedType(account.type) && (
                     <div className="detail-item">
                       <span className="detail-label">Banco:</span>
-                      <span className="detail-value">{account.bank_name}</span>
-                    </div>
-                  )}
-                  {account.account_number && (
-                    <div className="detail-item">
-                      <span className="detail-label">N° Cuenta:</span>
-                      <span className="detail-value">{account.account_number}</span>
+                      <span className="detail-value">{account.bank_name || 'Banco no asignado'}</span>
                     </div>
                   )}
                   <div className="detail-item">
-                    <span className="detail-label">Fecha creación:</span>
+                    <span className="detail-label">Fecha creacion:</span>
                     <span className="detail-value">
                       {formatDate(account.created_at || account.createdAt)}
                     </span>
@@ -331,3 +327,4 @@ export default function AccountsPage() {
     </div>
   );
 }
+
