@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
-import '../../assets/css/login.css';
+import '../../assets/css/Login.css';
 import cashlyLogo from '../../assets/Logo/Logo.png';
 
 
