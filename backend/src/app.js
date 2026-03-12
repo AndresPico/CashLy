@@ -10,7 +10,11 @@ import budgetsRoutes from './routes/budgets.routes.js';
 const app = express();
 
 // Middlewares globales
-app.use(cors());
+app.use(
+  cors({
+    origin: 'https://cash-ly.vercel.app',
+  })
+);
 app.use(express.json());
 
 //Rutas
